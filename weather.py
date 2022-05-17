@@ -24,6 +24,8 @@ def convert_date(iso_string):
     Returns:
         A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
     """
+    # strptime
+    # strftime
     pass
 
 
@@ -35,7 +37,9 @@ def convert_f_to_c(temp_in_farenheit):
     Returns:
         A float representing a temperature in degrees celcius, rounded to 1dp.
     """
-    pass
+    temp_in_celcius = round((float(temp_in_farenheit) - 32) * 5 / 9, 1)
+    return temp_in_celcius
+    # done
 
 
 def calculate_mean(weather_data):
@@ -46,7 +50,12 @@ def calculate_mean(weather_data):
     Returns:
         A float representing the mean value.
     """
-    pass
+    sum = 0
+    for index in range(0, len(weather_data)):
+        sum = sum + float(weather_data[index])
+    mean = sum / len(weather_data)
+    return mean
+    # done
 
 
 def load_data_from_csv(csv_file):
@@ -57,7 +66,10 @@ def load_data_from_csv(csv_file):
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     """
-    pass
+    with open(csv_file) as csv_file:
+        reader = csv.reader(csv_file)
+        for line in reader:
+            return line
 
 
 def find_min(weather_data):
@@ -68,7 +80,21 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
-    pass
+    if weather_data == []:
+        return ()
+    else:
+        min_value = float(weather_data[0])
+        print(min_value)
+        min_location = 0
+        index = 0
+
+        for weather in weather_data:
+            if float(weather) <= min_value:
+                min_value = float(weather)
+                min_location = index
+            index += 1
+        return min_value, min_location
+    # done
 
 
 def find_max(weather_data):
