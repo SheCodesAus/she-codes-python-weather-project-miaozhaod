@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 
-DEGREE_SYBMOL = u"\N{DEGREE SIGN}C"
+DEGREE_SYBMOL = "\N{DEGREE SIGN}C"
 
 
 def format_temperature(temp):
@@ -84,7 +84,6 @@ def find_min(weather_data):
         return ()
     else:
         min_value = float(weather_data[0])
-        print(min_value)
         min_location = 0
         index = 0
 
@@ -105,7 +104,20 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
-    pass
+    if weather_data == []:
+        return ()
+    else:
+        max_value = float(weather_data[0])
+        max_location = 0
+        index = 0
+
+        for weather in weather_data:
+            if float(weather) >= max_value:
+                max_value = float(weather)
+                max_location = index
+            index += 1
+        return max_value, max_location
+    # done
 
 
 def generate_summary(weather_data):
