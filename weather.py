@@ -26,7 +26,8 @@ def convert_date(iso_string):
     """
     # strptime
     # strftime
-    pass
+    date_object = datetime.strptime(iso_string, "%d %B, %Y")
+    return date_object
 
 
 def convert_f_to_c(temp_in_farenheit):
@@ -66,10 +67,20 @@ def load_data_from_csv(csv_file):
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     """
+    list = []
     with open(csv_file) as csv_file:
         reader = csv.reader(csv_file)
+        print(reader)
         for line in reader:
-            return line
+            if line != []:
+                list.append(line)
+    list.pop(0)
+    listResult = []
+    for li in list:
+        num = [li[0], (int(li[1])), (int(li[2]))]
+        listResult.append(num)
+    return listResult
+    # done
 
 
 def find_min(weather_data):
@@ -128,7 +139,9 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    for weather in weather_data:
+        return weather
+    
 
 
 def generate_daily_summary(weather_data):
