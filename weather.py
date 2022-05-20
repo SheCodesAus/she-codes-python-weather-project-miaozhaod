@@ -70,7 +70,6 @@ def load_data_from_csv(csv_file):
     list = []
     with open(csv_file) as csv_file:
         reader = csv.reader(csv_file)
-        print(reader)
         for line in reader:
             if line != []:
                 list.append(line)
@@ -141,7 +140,6 @@ def generate_summary(weather_data):
     """
     for weather in weather_data:
         return weather
-    
 
 
 def generate_daily_summary(weather_data):
