@@ -138,73 +138,40 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    # list = []
-    # with open(weather_data) as csv_file:
-    #     reader = csv.reader(csv_file)
-    #     for line in reader:
-    #         if line != []:
-    #             list.append(line)
-    # list.pop(0)
-    # listResult = []
-    # for li in list:
-    #     num = [li[0], (int(li[1])), (int(li[2]))]
-    #     listResult.append(num)
-
     weathers = []
-    for li in weather_data:
-        date = datetime.strptime(li[0], "%Y-%m-%dT%H:%M:%S%z").strftime("%A %d %B %Y")
-        low = round((float(li[1]) - 32) * 5 / 9, 1)
-        high = round((float(li[2]) - 32) * 5 / 9, 1)
-        newLi = [date, low, high]
-        weathers.append(newLi)
-    # print("weathers: ", weathers) # got a list of weathers[] in the format of date, low, high
-    days = len(weathers);
-    
+    for weather_line in weather_data:
+        date = convert_date(weather_line[0])
+        low = convert_f_to_c(weather_line[1])
+        high = convert_f_to_c(weather_line[2])
+        newLine = [date, low, high]
+        weathers.append(newLine)
+    days = len(weathers)
+
     low_temps = []
     for weather in weathers:
         low_temps.append(weather[1])
-    # print("low_temps: ", low_temps) # got a list of the low_temps[] in the above weathers[]
     avg_low = round(sum(low_temps) / len(low_temps), 1)
-    # print("avg_low: ", avg_low)
 
-    min_low = float(low_temps[0])
-    min_low_location = 0
-    index = 0
-    for low_temp in low_temps:
-        if float(low_temp) <= min_low:
-            min_low = float(low_temp)
-            min_low_location = index
-            index += 1
-    date_of_min_low = weathers[min_low_location][0]
-    # print("min_low | min_low_location | date_of_min_low: ", min_low, "|", min_low_location, "|", date_of_min_low)
+    min_low = find_min(low_temps)
+    date_of_min_low = weathers[min_low[1]][0]
 
     high_temps = []
     for weather in weathers:
         high_temps.append(weather[2])
-    # print("high_temps: ", high_temps)  # got a list of the low_temps[] in the above weathers[]
     avg_high = round(sum(high_temps) / len(high_temps), 1)
-    # print("avg_high: ", avg_high)
 
-    max_high = float(high_temps[0])
-    max_high_location = 0
-    index = 0
-    for high_temp in high_temps:
-        if float(high_temp) >= max_high:
-            max_high = float(high_temp)
-            max_high_location = index
-            index += 1
-    date_of_max_high = weathers[max_high_location][0]
-    # print("max_high | max_high_location | date_of_max_high: ", max_high, "|", max_high_location, "|", date_of_max_high)
+    max_high = find_max(high_temps)
+    date_of_max_high = weathers[max_high[1]][0]
 
     summary_heading = f"{days} Day Overview"
-    lowest_summary = f"The lowest temperature will be {min_low}°C, and will occur on {date_of_min_low}."
-    highest_summary = f"The highest temperature will be {max_high}°C, and will occur on {date_of_max_high}."
+    lowest_summary = f"The lowest temperature will be {min_low[0]}°C, and will occur on {date_of_min_low}."
+    highest_summary = f"The highest temperature will be {max_high[0]}°C, and will occur on {date_of_max_high}."
     avg_low_summary = f"The average low this week is {avg_low}°C."
     avg_high_summary = f"The average high this week is {avg_high}°C."
-    summary_result = f"{summary_heading}\n  {lowest_summary}\n  {highest_summary}\n  {avg_low_summary}\n  {avg_high_summary}\n"
+    summary_result = (
+        f"{summary_heading}\n  {lowest_summary}\n  {highest_summary}\n  {avg_low_summary}\n  {avg_high_summary}\n"
+    )
     return summary_result
-
-# print(generate_summary("./tests/data/example_one.csv"))
 
 
 def generate_daily_summary(weather_data):
@@ -215,4 +182,16 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    weathers = []
+    for li in weather_data:
+        date = convert_date(li[0])
+        low = convert_f_to_c(li[1])
+        high = convert_f_to_c(li[2])
+        newLi = [date, low, high]
+        weathers.append(newLi)
+    daily_summary_list = ""
+    for weather in weathers:
+        daily_summary_list += f"---- {weather[0]} ----\n"
+        daily_summary_list += f"  Minimum Temperature: {weather[1]}°C\n"
+        daily_summary_list += f"  Maximum Temperature: {weather[2]}°C\n\n"
+    return daily_summary_list
